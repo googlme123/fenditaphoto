@@ -3,38 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Random Photos</title>
+    <title>Random Photo Viewer</title>
     <style>
         body { font-family: Arial, sans-serif; text-align: center; background: #f0f0f0; margin: 0; padding: 20px; }
         img { max-width: 100%; height: auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-        button { background: #007bff; color: white; border: none; padding: 10px 20px; margin: 10px; border-radius: 5px; cursor: pointer; }
-        button:hover { background: #0056b3; }
     </style>
 </head>
 <body>
     <h1>Random Photo Viewer</h1>
-    <p>Click the button or refresh to see a new photo!</p>
-    <img id="randomImage" src="" alt="Random Photo" style="display: none;">
-    <br>
-    <button onclick="loadRandomImage()">New Photo</button>
+    <img id="randomImage" src="" alt="Random Photo">
 
     <script>
         // Replace these with YOUR photo filenames (exactly as uploaded)
         const imageFiles = [
             '8rbHkU4-Ttyegzr17BJeWg.png',
             'unnamed.png'
-            // Add more: 'yourphoto.jpg', 'another.png', etc.
+            // Add more: 'yourphoto.jpg', etc.
         ];
 
-        function loadRandomImage() {
+        // Load a random image on page load
+        window.onload = function() {
             const randomIndex = Math.floor(Math.random() * imageFiles.length);
             const imagePath = imageFiles[randomIndex];
             document.getElementById('randomImage').src = imagePath;
-            document.getElementById('randomImage').style.display = 'block';
-        }
-
-        // Load a random image on page load
-        window.onload = loadRandomImage;
+        };
     </script>
 </body>
 </html>
