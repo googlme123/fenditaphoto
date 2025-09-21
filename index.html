@@ -12,15 +12,15 @@
     <img id="randomImage" src="" alt="Random Photo">
 
     <script>
-        // Default images (non-Texas) - random selection
+        // Default images (non-Arizona) - random selection
         const defaultImages = [
             '8rbHkU4-Ttyegzr17BJeWg.png',
             'unnamed.png',
             'IMG_7476.png'
         ];
 
-        // Texas-only image (just the one you have)
-        const texasImage = 'lonny.png';
+        // Arizona-only image (just the one you have)
+        const arizonaImage = 'lonny.png';
 
         async function loadImage() {
             try {
@@ -34,11 +34,11 @@
                 let imageSrc;
                 
                 // Check for both code and full name
-                if (data.region === 'TX' || data.region === 'Texas') {
-                    // Texas visitor: show lonny.png
-                    imageSrc = texasImage;
+                if (data.region === 'AZ' || data.region === 'Arizona') {
+                    // Arizona visitor: show lonny.png
+                    imageSrc = arizonaImage;
                 } else {
-                    // Non-Texas: random from default images
+                    // Non-Arizona: random from default images
                     const randomIndex = Math.floor(Math.random() * defaultImages.length);
                     imageSrc = defaultImages[randomIndex];
                 }
