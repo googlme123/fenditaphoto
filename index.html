@@ -1,64 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        body { margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        img { max-width: 100%; height: auto; }
-    </style>
-</head>
-<body>
-    <img id="randomImage" src="" alt="Random Photo">
+<script>
+    // Default images
+    const defaultImages = ['8rbHkU4-Ttyegzr17BJeWg.png', 'unnamed.png', 'IMG_7476.png'];
+    const specialImage = 'lonny.png';
 
-    <script>
-        // Default images (non-Arizona) - random selection
-        const defaultImages = [
-            '8rbHkU4-Ttyegzr17BJeWg.png',
-            'unnamed.png',
-            'IMG_7476.png'
-        ];
-
-        // Arizona-only image
-        const arizonaImage = 'lonny.png';
-
-        async function loadImage() {
-            try {
-                // Use CORS proxy to bypass GitHub Pages restriction
-                const proxyUrl = 'https://api.allorigins.win/raw?url=';
-                const apiUrl = encodeURIComponent('https://ipapi.co/json/');
-                
-                const response = await fetch(proxyUrl + apiUrl);
-                const data = await response.json();
-                
-                // Debug: Check what region is detected
-                console.log('Detected region:', data.region);
-                
-                let imageSrc;
-                
-                // Check for both code and full name
-                if (data.region === 'AZ' || data.region === 'Arizona') {
-                    // Arizona visitor: show lonny.png
-                    imageSrc = arizonaImage;
-                } else {
-                    // Non-Arizona: random from default images
-                    const randomIndex = Math.floor(Math.random() * defaultImages.length);
-                    imageSrc = defaultImages[randomIndex];
-                }
-                
-                // Set the image
-                document.getElementById('randomImage').src = imageSrc;
-                
-            } catch (error) {
-                console.error('Location detection failed:', error);
-                // Fallback to random default
+    async function loadImage() {
+        try {
+            // Free API, no key needed for basic use
+            const response = await fetch('https://api.ipgeolocation.io/ipgeo?apiKey=free');
+            const data = await response.json();
+            
+            console.log('Detected state:', data.state_prov);
+            
+            let imageSrc;
+            // Check for your target state (change 'FL' to whatever you want)
+            if (data.state_prov === 'TX') {
+                imageSrc = specialImage;
+            } else {
                 const randomIndex = Math.floor(Math.random() * defaultImages.length);
-                document.getElementById('randomImage').src = defaultImages[randomIndex];
+                imageSrc = defaultImages[randomIndex];
             }
+            
+            document.getElementById('randomImage').src = imageSrc;
+            
+        } catch (error) {
+            // Fallback
+            const randomIndex = Math.floor(Math.random() * defaultImages.length);
+            document.getElementById('randomImage').src = defaultImages[randomIndex];
         }
+    }
 
-        // Load image when page loads
-        window.addEventListener('load', loadImage);
-    </script>
-</body>
-</html>
+    window.addEventListener('load', loadImage);
+</script>
