@@ -12,35 +12,42 @@
     <img id="randomImage" src="" alt="Random Photo">
 
     <script>
-        // Default images (non-Texas)
+        // Default images (non-Texas) - random selection
         const defaultImages = [
             '8rbHkU4-Ttyegzr17BJeWg.png',
             'unnamed.png',
             'IMG_7476.png'
         ];
 
-        // Texas-only images (replace with your Texas image filenames)
-        const texasImages = [
-            'lonny.png'
-        ];
+        // Texas-only image (just the one you have)
+        const texasImage = 'lonny.png';
 
         async function loadImage() {
             try {
-                // Fetch user's IP geolocation (no key needed - auto-detects IP)
+                // Fetch user's IP geolocation (no key needed)
                 const response = await fetch('https://ipapi.co/json/');
                 const data = await response.json();
                 
-                let images = defaultImages;
-                if (data.region === 'TX') {
-                    images = texasImages;
+                // Debug: Check what region is detected (remove after testing)
+                console.log('Detected region:', data.region);
+                
+                let imageSrc;
+                
+                // Check for both code and full name
+                if (data.region === 'TX' || data.region === 'Texas') {
+                    // Texas visitor: show lonny.png
+                    imageSrc = texasImage;
+                } else {
+                    // Non-Texas: random from default images
+                    const randomIndex = Math.floor(Math.random() * defaultImages.length);
+                    imageSrc = defaultImages[randomIndex];
                 }
                 
-                // Pick random image and set it
-                const randomIndex = Math.floor(Math.random() * images.length);
-                document.getElementById('randomImage').src = images[randomIndex];
+                // Set the image
+                document.getElementById('randomImage').src = imageSrc;
                 
             } catch (error) {
-                // Fallback to default if API fails
+                // Fallback to random default if API fails
                 const randomIndex = Math.floor(Math.random() * defaultImages.length);
                 document.getElementById('randomImage').src = defaultImages[randomIndex];
             }
