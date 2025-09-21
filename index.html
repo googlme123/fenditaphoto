@@ -14,37 +14,17 @@
     <script>
         async function loadImage() {
             try {
-                // Using a working CORS proxy for ipapi.co
-                const response = await fetch('https://cors-anywhere.herokuapp.com/https://ipapi.co/json/');
+                // Using thingproxy - more reliable than cors-anywhere
+                const response = await fetch('https://thingproxy.freeboard.io/fetch/https://ipapi.co/json/');
                 const data = await response.json();
                 
                 console.log('Detected region:', data.region);
                 console.log('Full data:', data);
                 
                 let imageSrc;
-                // Change 'FL' to your target state (TX, CA, NY, etc.)
-                if (data.region === 'TX') {
+                // Texas detection
+                if (data.region === 'TX' || data.region === 'Texas') {
                     imageSrc = 'lonny.png';
                     console.log('Showing special image for Texas');
                 } else {
-                    const defaultImages = ['8rbHkU4-Ttyegzr17BJeWg.png', 'unnamed.png', 'IMG_7476.png'];
-                    const randomIndex = Math.floor(Math.random() * defaultImages.length);
-                    imageSrc = defaultImages[randomIndex];
-                    console.log('Showing random default image');
-                }
-                
-                document.getElementById('randomImage').src = imageSrc;
-                
-            } catch (error) {
-                console.error('Error:', error);
-                // Fallback to random default
-                const defaultImages = ['8rbHkU4-Ttyegzr17BJeWg.png', 'unnamed.png', 'IMG_7476.png'];
-                const randomIndex = Math.floor(Math.random() * defaultImages.length);
-                document.getElementById('randomImage').src = defaultImages[randomIndex];
-            }
-        }
-
-        window.addEventListener('load', loadImage);
-    </script>
-</body>
-</html>
+                    const defaultImages = ['8rbHkU4-Ttyegzr17BJeWg.png', 'unnamed.png', 'IMG
