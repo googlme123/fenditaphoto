@@ -1,33 +1,50 @@
-<script>
-    // Default images
-    const defaultImages = ['8rbHkU4-Ttyegzr17BJeWg.png', 'unnamed.png', 'IMG_7476.png'];
-    const specialImage = 'lonny.png';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        img { max-width: 100%; height: auto; }
+    </style>
+</head>
+<body>
+    <img id="randomImage" src="" alt="Random Photo">
 
-    async function loadImage() {
-        try {
-            // Free API, no key needed for basic use
-            const response = await fetch('https://api.ipgeolocation.io/ipgeo?apiKey=free');
-            const data = await response.json();
-            
-            console.log('Detected state:', data.state_prov);
-            
-            let imageSrc;
-            // Check for your target state (change 'FL' to whatever you want)
-            if (data.state_prov === 'TX') {
-                imageSrc = specialImage;
-            } else {
+    <script>
+        async function loadImage() {
+            try {
+                // Using a working CORS proxy for ipapi.co
+                const response = await fetch('https://cors-anywhere.herokuapp.com/https://ipapi.co/json/');
+                const data = await response.json();
+                
+                console.log('Detected region:', data.region);
+                console.log('Full data:', data);
+                
+                let imageSrc;
+                // Change 'FL' to your target state (TX, CA, NY, etc.)
+                if (data.region === 'TX') {
+                    imageSrc = 'lonny.png';
+                    console.log('Showing special image for Texas');
+                } else {
+                    const defaultImages = ['8rbHkU4-Ttyegzr17BJeWg.png', 'unnamed.png', 'IMG_7476.png'];
+                    const randomIndex = Math.floor(Math.random() * defaultImages.length);
+                    imageSrc = defaultImages[randomIndex];
+                    console.log('Showing random default image');
+                }
+                
+                document.getElementById('randomImage').src = imageSrc;
+                
+            } catch (error) {
+                console.error('Error:', error);
+                // Fallback to random default
+                const defaultImages = ['8rbHkU4-Ttyegzr17BJeWg.png', 'unnamed.png', 'IMG_7476.png'];
                 const randomIndex = Math.floor(Math.random() * defaultImages.length);
-                imageSrc = defaultImages[randomIndex];
+                document.getElementById('randomImage').src = defaultImages[randomIndex];
             }
-            
-            document.getElementById('randomImage').src = imageSrc;
-            
-        } catch (error) {
-            // Fallback
-            const randomIndex = Math.floor(Math.random() * defaultImages.length);
-            document.getElementById('randomImage').src = defaultImages[randomIndex];
         }
-    }
 
-    window.addEventListener('load', loadImage);
-</script>
+        window.addEventListener('load', loadImage);
+    </script>
+</body>
+</html>
