@@ -3,29 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Image Display (Texas Special)</title>
     <style>
-        body { margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        img { max-width: 100%; height: auto; }
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            border: 2px solid #333;
+        }
+        .error-message {
+            color: red;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            display: none;
+        }
     </style>
 </head>
 <body>
-    <img id="randomImage" src="" alt="Random Photo">
+    <img id="randomImage" src="" alt="A randomly selected photo" style="display: none;">
+    <div id="errorMessage" class="error-message"></div>
 
     <script>
-        // Replace these with YOUR photo filenames (exactly as uploaded)
+        // Original random images (fallback for non-Texas)
         const imageFiles = [
             '8rbHkU4-Ttyegzr17BJeWg.png',
             'unnamed.png',
             'IMG_7476.png'
-            // Add more: 'yourphoto.jpg', etc.
         ];
 
-        // Load a random image on page load
-        window.onload = function() {
+        // Texas-specific image
+        const texasImage = 'lonny.png';
+
+        // Function to load a random image from the array
+        function loadRandomImage() {
             const randomIndex = Math.floor(Math.random() * imageFiles.length);
             const imagePath = imageFiles[randomIndex];
-            document.getElementById('randomImage').src = imagePath;
-        };
+            const imageElement = document.getElementById('randomImage');
+            imageElement.src = imagePath;
+            imageElement.alt = 'A randomly selected photo';
+            imageElement.style.display = 'block';
+            document.getElementById('errorMessage').style.display = 'none';
+        }
+
+        // Function to check if user is in Texas via IP and load image accordingly
+        async function checkAndLoadImage() {
+            const imageElement = document.getElementById('randomImage');
+            const errorMessage = document.getElementById('errorMessage');
+
+            try {
+                const response = await fetch('http://ip-api.com/json/');
+                if (!response.ok) {
+                    throw new Error('Geolocation fetch failed');
+                }
+                const data = await response.json();
+
+                // Check if region is Texas
+                if (data.regionName === 'Texas') {
+                    imageElement.src = texasImage;
+                    imageElement.alt = 'Special photo for Texas viewers';
+                    console.log('Texas detected! Showing lonny.png');
+                } else {
+                    loadRandomImage();
+                    console.log('Non-Texas detected. Showing random image.');
+                }
+                imageElement.style.display = 'block';
+                errorMessage.style.display = 'none';
+            } catch (error) {
+                console.error('Error fetching geolocation:', error);
+                loadRandomImage(); // Fallback to random
+                errorMessage.textContent = 'Unable to detect location. Showing random image.';
+                errorMessage.style.display = 'block';
+            }
+        }
+
+        // Load image on page load
+        window.onload = checkAndLoadImage;
     </script>
 </body>
 </html>
