@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>I love u vurnul</title>
+  <title>i love u vurnul</title>
   <style>
     * {
       margin: 0;
@@ -59,8 +59,33 @@
 <body>
   <div id="overlay">click here vurnul</div>
 
-  <video id="video" loop playsinline>
-    <source src="assets/intro.mp4" type="video/mp4" />
-    Your browser does not support the video tag.
-  </video>
+  <video id="video" src="video.mp4" loop playsinline preload="auto"></video>
 
+  <script>
+    const overlay = document.getElementById("overlay");
+    const video = document.getElementById("video");
+
+    async function startVideo() {
+      video.classList.add("show");
+      video.muted = false;
+      video.volume = 1;
+
+      try {
+        await video.play();
+        overlay.style.display = "none";
+      } catch (err) {
+        try {
+          video.muted = true;
+          await video.play();
+          overlay.style.display = "none";
+        } catch (e) {
+          alert("Video could not play. Make sure video.mp4 is in the same folder as index.html.");
+        }
+      }
+    }
+
+    overlay.addEventListener("click", startVideo, { once: true });
+    overlay.addEventListener("touchstart", startVideo, { once: true });
+  </script>
+</body>
+</html>
